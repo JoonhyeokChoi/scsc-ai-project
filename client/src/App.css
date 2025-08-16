@@ -1,0 +1,76 @@
+/* Custom styles for App component */
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Smooth transitions */
+.transition-all {
+    transition: all 0.2s ease-in-out;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* YouTube item hover effects */
+.youtube-item {
+    transition: all 0.2s ease-in-out;
+}
+
+.youtube-item:hover {
+    transform: translateY(-2px);
+}
+
+/* Rank badge animations */
+.rank-badge {
+    transition: all 0.3s ease-in-out;
+}
+
+.rank-badge:hover {
+    transform: scale(1.1);
+}
+
+/* Thumbnail hover effects */
+.thumbnail-container {
+    transition: all 0.2s ease-in-out;
+}
+
+.thumbnail-container:hover {
+    transform: scale(1.05);
+}
+
+/* YouTube icon pulse effect */
+.youtube-icon {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
