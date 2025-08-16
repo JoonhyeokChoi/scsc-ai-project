@@ -5,9 +5,11 @@ import './App.css';
 interface YouTubeItem {
     title: string;
     channel: string;
-    views: string;
-    thumbnail?: string;
-    url?: string;
+    channel_title?: string;      // 채널명 (더 자세한 정보)
+    subscriber_count?: number;  // 구독자 수
+    view_count: number;
+    thumbnail_url?: string;
+    video_url?: string;
 }
 
 interface SnapshotData {
@@ -69,23 +71,29 @@ function App() {
                         {
                             title: "테스트 동영상 1 - 매우 재미있는 콘텐츠입니다",
                             channel: "테스트 채널 1",
-                            views: "1.2M",
-                            thumbnail: "https://via.placeholder.com/240x160/ff0000/ffffff?text=Video+1",
-                            url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                            channel_title: "테스트 채널 1",
+                            subscriber_count: 2500000,
+                            view_count: 1200000,
+                            thumbnail_url: "https://via.placeholder.com/240x160/ff0000/ffffff?text=Video+1",
+                            video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
                         },
                         {
                             title: "테스트 동영상 2 - 놀라운 발견",
                             channel: "테스트 채널 2",
-                            views: "890K",
-                            thumbnail: "https://via.placeholder.com/240x160/00ff00/ffffff?text=Video+2",
-                            url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                            channel_title: "테스트 채널 2",
+                            subscriber_count: 1800000,
+                            view_count: 890000,
+                            thumbnail_url: "https://via.placeholder.com/240x160/00ff00/ffffff?text=Video+2",
+                            video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
                         },
                         {
                             title: "테스트 동영상 3 - 인기 급상승",
                             channel: "테스트 채널 3",
-                            views: "567K",
-                            thumbnail: "https://via.placeholder.com/240x160/0000ff/ffffff?text=Video+3",
-                            url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                            channel_title: "테스트 채널 3",
+                            subscriber_count: 950000,
+                            view_count: 567000,
+                            thumbnail_url: "https://via.placeholder.com/240x160/0000ff/ffffff?text=Video+3",
+                            video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
                         }
                     ]
                 };
@@ -195,7 +203,7 @@ function App() {
                                 <div
                                     key={index}
                                     className="bg-white rounded-lg shadow-sm border overflow-hidden hover:shadow-md transition-all duration-200 cursor-pointer group"
-                                    onClick={() => item.url && handleYouTubeClick(item.url)}
+                                    onClick={() => item.video_url && handleYouTubeClick(item.video_url)}
                                 >
                                     <div className="flex items-center p-4">
                                         {/* 순위 */}
@@ -211,9 +219,9 @@ function App() {
 
                                         {/* 썸네일 */}
                                         <div className="flex-shrink-0 mr-4">
-                                            {item.thumbnail ? (
+                                            {item.thumbnail_url ? (
                                                 <img
-                                                    src={item.thumbnail}
+                                                    src={item.thumbnail_url}
                                                     alt={item.title}
                                                     className="w-24 h-16 object-cover rounded-md"
                                                     onError={(e) => {
@@ -235,8 +243,15 @@ function App() {
                                             <h3 className="font-medium text-gray-900 text-lg line-clamp-2 mb-2 group-hover:text-primary-600 transition-colors">
                                                 {item.title}
                                             </h3>
-                                            <p className="text-gray-600 text-sm mb-1">{item.channel}</p>
-                                            <p className="text-gray-500 text-xs">{item.views} 조회수</p>
+                                            <p className="text-gray-600 text-sm mb-1">
+                                                {item.channel_title || item.channel}
+                                            </p>
+                                            <div className="flex items-center space-x-4 text-gray-500 text-xs">
+                                                <span>{item.view_count.toLocaleString()} 조회수</span>
+                                                {item.subscriber_count && (
+                                                    <span>{item.subscriber_count.toLocaleString()} 구독자</span>
+                                                )}
+                                            </div>
                                         </div>
 
                                         {/* YouTube 링크 아이콘 */}
