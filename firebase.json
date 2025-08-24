@@ -1,0 +1,24 @@
+{
+  "hosting": {
+    "public": "client/build",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "headers": [
+      { "source": "/**", "headers": [ { "key": "Cache-Control", "value": "public, max-age=3600" } ] },
+      { "source": "/index.html", "headers": [ { "key": "Cache-Control", "value": "no-cache" } ] }
+    ],
+    "rewrites": [
+      {
+        "source": "/api/**",
+        "run": {
+          "serviceId": "yt-top10-backend",
+          "region": "asia-northeast3"
+        }
+      },
+      { "source": "**", "destination": "/index.html" }
+    ]
+  }
+}
