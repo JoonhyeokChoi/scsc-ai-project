@@ -144,7 +144,7 @@ function App() {
                     <div className="flex justify-between items-center py-6">
                         <div>
                             <h1 className="text-3xl font-bold text-gray-900">YouTube Top 10</h1>
-                            <p className="text-gray-600">실시간 인기 동영상 순위!</p>
+                            <p className="text-gray-600">실시간 인기 동영상 순위~</p>
                         </div>
                         <div className="flex items-center space-x-4">
                             <select
