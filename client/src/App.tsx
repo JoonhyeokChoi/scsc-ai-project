@@ -30,6 +30,7 @@ function App() {
     const [error, setError] = useState<string>('');
     const [selectedDate, setSelectedDate] = useState<string>('');
     const [isLatestData, setIsLatestData] = useState<boolean>(true);
+    const [selectedTimeFilter, setSelectedTimeFilter] = useState<string>('today'); // 'today', 'yesterday', 'weekAgo'
 
     // YouTube video ID에서 썸네일 URL 생성
     const generateThumbnailUrl = (videoUrl: string): string => {
@@ -191,6 +192,7 @@ function App() {
 
     const handleLatestData = () => {
         fetchLatestSnapshot(selectedRegion);
+        setSelectedTimeFilter('today');
     };
 
     const handleYesterday = () => {
@@ -198,6 +200,7 @@ function App() {
         yesterday.setDate(yesterday.getDate() - 1);
         const yesterdayStr = yesterday.toISOString().split('T')[0];
         handleDateChange(yesterdayStr);
+        setSelectedTimeFilter('yesterday');
     };
 
     const handleWeekAgo = () => {
@@ -205,6 +208,7 @@ function App() {
         weekAgo.setDate(weekAgo.getDate() - 7);
         const weekAgoStr = weekAgo.toISOString().split('T')[0];
         handleDateChange(weekAgoStr);
+        setSelectedTimeFilter('weekAgo');
     };
 
     const handleYouTubeClick = (url: string) => {
@@ -233,20 +237,55 @@ function App() {
             {/* Header */}
             <header className="bg-white/80 backdrop-blur-md shadow-lg border-b border-white/20 sticky top-0 z-50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center py-6 space-y-4 lg:space-y-0">
-                        <div>
-                            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                                YouTube Top 10
-                            </h1>
-                            <p className="text-gray-600 mt-2">실시간 인기 동영상 순위</p>
+                    <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center py-4 space-y-3 lg:space-y-0">
+                        {/* Left side: Title and quick selection buttons */}
+                        <div className="flex flex-col space-y-3">
+                            <div>
+                                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                                    YouTube Top 10
+                                </h1>
+                                <p className="text-gray-600 text-sm">실시간 인기 동영상 순위</p>
+                            </div>
+                            
+                            {/* 빠른 선택 버튼들 */}
+                            <div className="flex flex-wrap items-center space-x-2">
+                                <button
+                                    onClick={handleLatestData}
+                                    className={`px-3 py-1.5 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 text-sm ${selectedTimeFilter === 'today'
+                                        ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg'
+                                        : 'bg-white/80 text-gray-700 hover:bg-white shadow-sm'
+                                        }`}
+                                >
+                                    🌟 오늘
+                                </button>
+                                <button
+                                    onClick={handleYesterday}
+                                    className={`px-3 py-1.5 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 text-sm ${selectedTimeFilter === 'yesterday'
+                                        ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg'
+                                        : 'bg-white/80 text-gray-700 hover:bg-white shadow-sm'
+                                        }`}
+                                >
+                                    📅 어제
+                                </button>
+                                <button
+                                    onClick={handleWeekAgo}
+                                    className={`px-3 py-1.5 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 text-sm ${selectedTimeFilter === 'weekAgo'
+                                        ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg'
+                                        : 'bg-white/80 text-gray-700 hover:bg-white shadow-sm'
+                                        }`}
+                                >
+                                    📆 일주일 전
+                                </button>
+                            </div>
                         </div>
 
-                        <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
+                        {/* Right side: Controls */}
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
                             {/* 지역 선택 */}
                             <select
                                 value={selectedRegion}
                                 onChange={(e) => handleRegionChange(e.target.value)}
-                                className="px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/90 backdrop-blur-sm shadow-sm"
+                                className="px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/90 backdrop-blur-sm shadow-sm text-sm"
                             >
                                 {regions.map((region) => (
                                     <option key={region} value={region}>
@@ -258,7 +297,7 @@ function App() {
                             {/* 날짜 선택 */}
                             <div className="relative">
                                 <div
-                                    className="px-4 py-2 border border-gray-300 rounded-xl bg-white/90 backdrop-blur-sm shadow-sm cursor-pointer hover:bg-white transition-colors duration-200"
+                                    className="px-3 py-1.5 border border-gray-300 rounded-lg bg-white/90 backdrop-blur-sm shadow-sm cursor-pointer hover:bg-white transition-colors duration-200"
                                     onClick={() => {
                                         const dateInput = document.querySelector('input[type="date"]') as HTMLInputElement;
                                         if (dateInput) {
@@ -270,37 +309,12 @@ function App() {
                                         type="date"
                                         value={selectedDate}
                                         onChange={(e) => handleDateChange(e.target.value)}
-                                        className="w-full bg-transparent border-none outline-none cursor-pointer"
+                                        className="w-full bg-transparent border-none outline-none cursor-pointer text-sm"
                                         style={{ pointerEvents: 'none' }}
                                     />
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    {/* 빠른 선택 버튼들 */}
-                    <div className="flex flex-wrap items-center space-x-3 pb-4">
-                        <button
-                            onClick={handleLatestData}
-                            className={`px-4 py-2 rounded-xl font-medium transition-all duration-200 transform hover:scale-105 ${isLatestData
-                                ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg'
-                                : 'bg-white/80 text-gray-700 hover:bg-white shadow-sm'
-                                }`}
-                        >
-                            🌟 오늘
-                        </button>
-                        <button
-                            onClick={handleYesterday}
-                            className="px-4 py-2 bg-white/80 text-gray-700 rounded-xl font-medium shadow-sm hover:bg-white hover:shadow-md transition-all duration-200 transform hover:scale-105"
-                        >
-                            📅 어제
-                        </button>
-                        <button
-                            onClick={handleWeekAgo}
-                            className="px-4 py-2 bg-white/80 text-gray-700 rounded-xl font-medium shadow-sm hover:bg-white hover:shadow-md transition-all duration-200 transform hover:scale-105"
-                        >
-                            📆 일주일 전
-                        </button>
                     </div>
                 </div>
             </header>
