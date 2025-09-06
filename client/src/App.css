@@ -74,3 +74,13 @@
         transform: scale(1);
     }
 }
+
+/* App.css */
+@media (max-width: 640px) {
+    html { font-size: 14px; } /* default ~16px → 14px on small screens */
+  }
+  
+  /* Ensure the viewport is correct in public/index.html:
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  */
+  
