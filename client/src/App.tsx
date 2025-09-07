@@ -243,22 +243,13 @@ function App() {
                 ))}
               </select>
 
-              <div className="px-3 py-1.5 border border-gray-300 rounded-lg bg-white/90 backdrop-blur-sm shadow-sm cursor-pointer hover:bg-white transition-colors duration-200"
-                onClick={() => {
-                    const dateInput = document.querySelector('input[type="date"]') as HTMLInputElement;
-                    if (dateInput) {
-                        dateInput.showPicker();
-                    }
-                }}
-                >
-                <input
-                    type="date"
-                    value={selectedDate}
-                    onChange={(e) => handleDateChange(e.target.value)}
-                    className="w-full bg-transparent border-none outline-none cursor-pointer text-sm"
-                    style={{ pointerEvents: 'none' }}
-                />
-            </div>
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => handleDateChange(e.target.value)}
+                className="shrink-0 min-w-[9.5rem] sm:min-w-[11rem] px-3 py-1.5 border border-gray-300 rounded-lg bg-white/90 backdrop-blur-sm shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                aria-label="날짜 선택"
+              />
             </div>
           </div>
         </div>
