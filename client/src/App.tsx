@@ -202,14 +202,16 @@ function App() {
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="flex flex-col py-3 lg:py-4 gap-2 sm:gap-3">
             {/* Title */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
-              <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <div className="flex flex-row items-center justify-between gap-2">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 min-w-0 flex-1">
+                <h1 className="text-xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent truncate">
                   YouTube Top 10
                 </h1>
                 <p className="text-gray-600 text-xs sm:text-sm">실시간 인기 동영상 순위</p>
               </div>
-              <AuthButton />
+              <div className="flex-shrink-0">
+                <AuthButton />
+              </div>
             </div>
 
             {/* Toolbar: buttons + pickers all in one row; pickers right after '일주일 전' */}
