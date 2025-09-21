@@ -2,6 +2,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import './App.css';
+import AuthButton from './components/AuthButton';
+import { logEvent } from 'firebase/analytics';
+import { analytics } from './firebase';
 
 interface YouTubeItem {
   title: string;
@@ -166,7 +169,20 @@ function App() {
     setSelectedTimeFilter('weekAgo');
     handleDateChange(d.toISOString().split('T')[0]);
   };
-  const handleYouTubeClick = (url: string) => { if (url) window.open(url, '_blank'); };
+  const handleYouTubeClick = (url: string, item: YouTubeItem) => { 
+    if (url) {
+      // Log video click event with rank and other details
+      logEvent(analytics, 'video_clicked', {
+        video_rank: item.rank || 0,
+        video_title: item.title,
+        channel_title: item.channel_title,
+        date: selectedDate,
+        country: selectedRegion
+      });
+      
+      window.open(url, '_blank'); 
+    }
+  };
 
   if (loading && !snapshotData) {
     return (
@@ -186,11 +202,14 @@ function App() {
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="flex flex-col py-3 lg:py-4 gap-2 sm:gap-3">
             {/* Title */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                YouTube Top 10
-              </h1>
-              <p className="text-gray-600 text-xs sm:text-sm">실시간 인기 동영상 순위</p>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  YouTube Top 10
+                </h1>
+                <p className="text-gray-600 text-xs sm:text-sm">실시간 인기 동영상 순위</p>
+              </div>
+              <AuthButton />
             </div>
 
             {/* Toolbar: buttons + pickers all in one row; pickers right after '일주일 전' */}
@@ -301,7 +320,7 @@ function App() {
                 <div
                   key={index}
                   className="bg-white/80 backdrop-blur-md rounded-xl sm:rounded-2xl shadow-lg border border-white/20 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer group"
-                  onClick={() => item.video_url && handleYouTubeClick(item.video_url)}
+                  onClick={() => item.video_url && handleYouTubeClick(item.video_url, item)}
                 >
                   <div className="flex items-center p-4 sm:p-6 gap-4">
                     {/* Rank */}
@@ -353,11 +372,9 @@ function App() {
 
                     {/* Icon */}
                     <div className="flex-shrink-0 ml-2 sm:ml-4">
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl sm:rounded-2xl flex items-center justify-center group-hover:from-red-600 group-hover:to-red-700 transition-transform duration-300 group-hover:scale-105 shadow-lg">
-                        <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M2.003 2.833h15.994l-1.154 7.51L10 9.167l-6.843 1.176L2.003 2.833zM0 2.833C0 1.5.831.5 1.833.5h16.334C19.169.5 20 1.5 20 2.833v14.334C20 18.5 19.169 19.5 18.167 19.5H1.833C.831 19.5 0 18.5 0 17.167V2.833z" />
-                        </svg>
-                      </div>
+                      <svg className="w-10 h-10 sm:w-12 sm:h-12 text-red-600" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                      </svg>
                     </div>
                   </div>
                 </div>
